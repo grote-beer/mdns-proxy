@@ -1,16 +1,29 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    eventmachine (0.12.10)
-    rexec (1.4.1)
-    ruby-dbus (0.7.0)
-    rubydns (0.3.4)
-      eventmachine
-      rexec
+    async (1.26.2)
+      console (~> 1.0)
+      nio4r (~> 2.3)
+      timers (~> 4.1)
+    async-dns (1.2.5)
+      async-io (~> 1.15)
+    async-io (1.30.0)
+      async (~> 1.14)
+    console (1.8.2)
+    eventmachine (1.2.7)
+    nio4r (2.5.2)
+    ruby-dbus (0.16.0)
+    rubydns (2.0.2)
+      async-dns (~> 1.0)
+    timers (4.3.0)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  eventmachine
   ruby-dbus
   rubydns
+
+BUNDLED WITH
+   2.0.2

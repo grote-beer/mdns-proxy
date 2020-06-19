@@ -6,10 +6,10 @@ require 'resolv'
 require 'socket'
 require 'etc'
 
-BIND_ADDRESS = '127.0.0.1'  # you probably want to bind to your LAN address
-BIND_PORT    = 53           # ports lower than 1024 require superuser privileges
+BIND_ADDRESS = '0.0.0.0'  # you probably want to bind to your LAN address
+BIND_PORT    = 5333           # ports lower than 1024 require superuser privileges
 
-PROXY_DOMAIN  = 'vpn'    # accept queries for *.vpn
+PROXY_DOMAIN  = 'quickscan'    # accept queries for *.quickscan
 LOOKUP_DOMAIN = 'local'  # proxy them as queries for *.local
 
 module Server
@@ -20,8 +20,10 @@ module Server
   end
 
   def receive_data(data)
+    puts "Receive request"
     port, ip = Socket.unpack_sockaddr_in(get_peername)
     query = Resolv::DNS::Message::decode(data)
+    puts "#{ip}:#{port}"
     response = Response.new(self, query, "#{ip}:#{port}")
   end
 
@@ -127,7 +129,10 @@ def drop_privs(user, group)
   Process::Sys.setuid(uid)
 end
 
+puts "Starting..."
+
 EventMachine.run do
   EventMachine.open_datagram_socket(BIND_ADDRESS, BIND_PORT, Server)
   drop_privs('nobody', 'nogroup') if Process::Sys.getuid == 0
+  puts "Listend on " + BIND_ADDRESS + ":" + BIND_PORT.to_s
 end
